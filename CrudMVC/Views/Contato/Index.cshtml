@@ -8,6 +8,25 @@
     <div class="d-grip gap-2 d-md-flex justify-content-md-start">
         <a asp-controller="Contato" asp-action="Criar" role="button" class="btn btn-primary">Adicionar novo contato</a>
     </div>
+    <br/>
+    <!--
+        Aqui tratamos nossas variáveis temporárias, caso se adequem às
+        condições a seguir, será exibido o alert correspondente        
+    -->
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MensagemSucesso"]
+        </div>
+    }
+    @if(TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MensagemErro"]
+        </div>
+    }
 
     <br/>
 
@@ -45,7 +64,6 @@
                     </tr>
                 }
             }
-            
         </tbody>
     </table>
 </div>

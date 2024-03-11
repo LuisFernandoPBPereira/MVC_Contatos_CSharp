@@ -44,21 +44,58 @@ namespace CrudMVC.Controllers
         [HttpPost]
         public IActionResult Criar(ContatoModel contato)
         {
-            _contatoRepositorio.Adicionar(contato);
-            return RedirectToAction("Index");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _contatoRepositorio.Adicionar(contato);
+                    TempData["MensagemSucesso"] = "Contato cadastrado com sucesso!";
+                    return RedirectToAction("Index");
+                }
+
+                return View(contato);
+            }
+            catch (Exception e)
+            {
+                TempData["MensagemErro"] = $"Não foi possível cadastrar seu contato, tente novamente! Detalhe do erro {e.Message}";
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
         public IActionResult Editar(ContatoModel contato)
         {
-            _contatoRepositorio.Editar(contato);
-            return RedirectToAction("Index");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _contatoRepositorio.Editar(contato);
+                    TempData["MensagemSucesso"] = "Contato editado com sucesso!";
+                    return RedirectToAction("Index");
+                }
+
+                return View(contato);
+            }
+            catch (Exception e)
+            {
+                TempData["MensagemErro"] = $"Não foi possível editar seu contato, tente novamente! Detalhe do erro {e.Message}";
+                return RedirectToAction("Index");
+            }
         }
         
         public IActionResult Apagar(int id)
         {
-            _contatoRepositorio.Apagar(id);
-            return RedirectToAction("Index");
+            try
+            {
+                _contatoRepositorio.Apagar(id);
+                TempData["MensagemSucesso"] = "Contato apagado com sucesso!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                TempData["MensagemErro"] = $"Não foi possível apagar seu contato, tente novamente! Detalhe do erro {e.Message}";
+                return RedirectToAction("Index");
+            }
         }
     }
 }

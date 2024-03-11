@@ -11,14 +11,17 @@
         <div class="mb-3">
             <label for="exampleInputName1" class="form-label">Nome</label>
             <input type="text" asp-for="Nome" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Digite o nome do contato">
+            @Html.ValidationMessageFor(x=>x.Nome)
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">E-mail</label>
-        <input type="email" asp-for="Email" class="form-control" id="exampleInputEmail" placeholder="email@exemplo.com">
+            <input type="email" asp-for="Email" class="form-control" id="exampleInputEmail" placeholder="email@exemplo.com">
+            @Html.ValidationMessageFor(x => x.Email)
         </div>
         <div class="mb-3">
             <label for="exampleInputSmartphone" class="form-label">Celular</label>
-        <input type="text" asp-for="Celular" class="form-control" id="exampleInputEmail" placeholder="Digite o telefone do contato">
+            <input type="text" asp-for="Celular" class="form-control" id="exampleInputEmail" placeholder="Digite o telefone do contato">
+            @Html.ValidationMessageFor(x => x.Celular)
         </div>
         <button type="submit" class="btn btn-primary btn-block">Adicionar</button>
         <a asp-controller="Contato" asp-action="Index" role="button" class="btn btn-secondary btn-block">Voltar</a>
