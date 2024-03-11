@@ -35,9 +35,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+//A rota padrão ao inicializar a aplicação é a rota de Login
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
 

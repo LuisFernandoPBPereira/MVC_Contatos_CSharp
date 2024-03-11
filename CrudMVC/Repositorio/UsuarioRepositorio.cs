@@ -48,6 +48,12 @@ namespace CrudMVC.Repositorio
             return _bancoContext.Usuarios.FirstOrDefault(x => x.Id == id);
         }
 
+        public UsuarioModel BuscarPorLogin(string login)
+        {
+            return _bancoContext.Usuarios.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+
+        }
+
         //Aqui listamos retornamos a listagem de todos os usuários
         public List<UsuarioModel> BuscarTodos()
         {
