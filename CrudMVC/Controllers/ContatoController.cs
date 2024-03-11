@@ -46,9 +46,12 @@ namespace CrudMVC.Controllers
         {
             try
             {
+                //Se o estado da ContatoModel é válida
                 if (ModelState.IsValid)
                 {
+                    //Adicionamos o contato criado no banco de dados
                     _contatoRepositorio.Adicionar(contato);
+                    //Usamos uma variável temporária para exibir um alerta
                     TempData["MensagemSucesso"] = "Contato cadastrado com sucesso!";
                     return RedirectToAction("Index");
                 }
@@ -57,6 +60,7 @@ namespace CrudMVC.Controllers
             }
             catch (Exception e)
             {
+                //Tratativa de erro
                 TempData["MensagemErro"] = $"Não foi possível cadastrar seu contato, tente novamente! Detalhe do erro {e.Message}";
                 return RedirectToAction("Index");
             }
@@ -67,9 +71,12 @@ namespace CrudMVC.Controllers
         {
             try
             {
+                //Se o estado da ContatoModel é válida
                 if (ModelState.IsValid)
                 {
+                    //Editamos o contato
                     _contatoRepositorio.Editar(contato);
+                    //Usamos uma variável temporária para exibir um alerta
                     TempData["MensagemSucesso"] = "Contato editado com sucesso!";
                     return RedirectToAction("Index");
                 }
@@ -78,6 +85,7 @@ namespace CrudMVC.Controllers
             }
             catch (Exception e)
             {
+                //Tratativa de erro
                 TempData["MensagemErro"] = $"Não foi possível editar seu contato, tente novamente! Detalhe do erro {e.Message}";
                 return RedirectToAction("Index");
             }
@@ -87,12 +95,15 @@ namespace CrudMVC.Controllers
         {
             try
             {
+                //Apagamos o contato pelo ID
                 _contatoRepositorio.Apagar(id);
+                //Usamos uma variável temporária para exibir um alerta
                 TempData["MensagemSucesso"] = "Contato apagado com sucesso!";
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
+                //Tratativa de erro
                 TempData["MensagemErro"] = $"Não foi possível apagar seu contato, tente novamente! Detalhe do erro {e.Message}";
                 return RedirectToAction("Index");
             }

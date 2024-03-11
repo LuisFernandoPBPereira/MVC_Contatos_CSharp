@@ -8,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//Aqui é configurado a conexão do banco de dados ao iniciar a aplicação
+//Permite a injeção de dependências
 builder.Services.AddScoped<IContatoRepositorio, ContatoRepositorio>();
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+//Aqui é configurado a conexão do banco de dados ao iniciar a aplicação
 builder.Services.AddEntityFrameworkSqlServer().
     AddDbContext<BancoContext>(
         options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))

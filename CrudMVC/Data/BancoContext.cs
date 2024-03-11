@@ -15,5 +15,6 @@ namespace CrudMVC.Data
         //Esta será a tabela do banco de dados, passando um Set no banco de dados
         //Esse Set é do tipo ContatoModel, que possui os campos: Id, Nome, Email e Celular
         public DbSet<ContatoModel> Contatos { get; set; }
+        public DbSet<UsuarioModel> Usuarios { get; set; }
     }
 }

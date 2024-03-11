@@ -1,0 +1,76 @@
+﻿@model List<UsuarioModel>;
+@{
+    ViewData["Title"] = "Lista de Usuários";
+}
+
+<div class="text-center">
+
+    <div class="d-grip gap-2 d-md-flex justify-content-md-start">
+        <a asp-controller="Usuario" asp-action="Criar" role="button" class="btn btn-primary">Adicionar novo usuário</a>
+    </div>
+    <br />
+    <!--
+        Aqui tratamos nossas variáveis temporárias, caso se adequem às
+        condições a seguir, será exibido o alert correspondente
+    -->
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MensagemSucesso"]
+        </div>
+    }
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MensagemErro"]
+        </div>
+    }
+
+    <br />
+
+    <h1 class="display-4">Lista de Contatos</h1>
+    <table class="table" id="table-usuarios">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Login</th>
+                <th scope="col">Perfil</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Data de cadastro</th>
+                <th scope="col">Data de atualização</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--
+                Aqui iniciamos um trecho de código C#, onde percorremos uma lista do tipo
+                ContatoModel, que contém todos os usuários que foram buscados no banco de dados.
+                Já com os botões de edição e deleção
+            -->
+            @if (Model != null && Model.Any())
+            {
+                foreach (UsuarioModel item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.Id</th>
+                        <td>@item.Nome</td>
+                        <td>@item.Login</td>
+                        <td>@(item.Perfil == CrudMVC.Enums.PerfilEnum.Admin ? "Administrador" : "Padrão")</td>
+                        <td>@item.Email</td>
+                        <td>@item.DataCadastro</td>
+                        <td>@item.DataAtualizacao</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a asp-controller="Usuario" asp-action="Editar" asp-route-id="@item.Id" role="button" class="btn btn-primary">Editar</a>
+                                <a asp-controller="Usuario" asp-action="ApagarConfirmacao" asp-route-id="@item.Id" role="button" class="btn btn-danger">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

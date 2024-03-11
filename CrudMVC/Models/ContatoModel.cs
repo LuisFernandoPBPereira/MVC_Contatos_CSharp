@@ -8,6 +8,12 @@ namespace CrudMVC.Models
      */
     public class ContatoModel
     {
+        /*
+         * Utilizamos o DataAnnotations para validar os campos no HTMl
+         * 
+         * -- Required: menciona que o campo é obrigatório
+         * -- EmailAddress: menciona se o email informado é válido
+        */
         public int Id { get; set; }
         [Required(ErrorMessage = "Digite o nome do contato")]
         public string Nome { get; set; }

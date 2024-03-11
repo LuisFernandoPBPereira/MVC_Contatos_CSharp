@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $(document).ready(function () {
         getDatatable("#table-contatos");
-        //getDatatable("#tabela2");
+        getDatatable("#table-usuarios");
     })
     function getDatatable(id) {
         $(id).DataTable({
