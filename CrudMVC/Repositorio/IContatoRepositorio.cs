@@ -6,7 +6,7 @@ namespace CrudMVC.Repositorio
     {
         //Definimos a interface do contato
         ContatoModel BuscarPorId(int id);
-        List<ContatoModel> BuscarTodos();
+        List<ContatoModel> BuscarTodos(int usuarioId);
         ContatoModel Adicionar(ContatoModel contato);
         ContatoModel Editar(ContatoModel contato);
         bool Apagar(int id);

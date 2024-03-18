@@ -1,4 +1,5 @@
 ﻿using CrudMVC.Filters;
+using CrudMVC.Helper;
 using CrudMVC.Models;
 using CrudMVC.Repositorio;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,12 @@ namespace CrudMVC.Controllers;
 public class ContatoController : Controller
 {
     private readonly IContatoRepositorio _contatoRepositorio;
-    public ContatoController(IContatoRepositorio contatoRepositorio)
+    private readonly ISessao _sessao;
+    public ContatoController(IContatoRepositorio contatoRepositorio,
+                             ISessao sessao)
     {
         _contatoRepositorio = contatoRepositorio;
+        _sessao = sessao;
     }
     /*
         Abaixo estão as Views das respectivas funcionalidades do CRUD
@@ -21,7 +25,8 @@ public class ContatoController : Controller
     //Listamos todos os contatos no frontend
     public IActionResult Index()
     {
-        List<ContatoModel> contatos = _contatoRepositorio.BuscarTodos();
+        UsuarioModel usuarioLogado = _sessao.BuscarSessaoDoUsuario();
+        List<ContatoModel> contatos = _contatoRepositorio.BuscarTodos(usuarioLogado.Id);
         return View(contatos);
     }
     public IActionResult Criar()
@@ -52,8 +57,10 @@ public class ContatoController : Controller
             //Se o estado da ContatoModel é válida
             if (ModelState.IsValid)
             {
+                UsuarioModel usuarioLogado = _sessao.BuscarSessaoDoUsuario();
+                contato.UsuarioId = usuarioLogado.Id;
                 //Adicionamos o contato criado no banco de dados
-                _contatoRepositorio.Adicionar(contato);
+                contato = _contatoRepositorio.Adicionar(contato);
                 //Usamos uma variável temporária para exibir um alerta
                 TempData["MensagemSucesso"] = "Contato cadastrado com sucesso!";
                 return RedirectToAction("Index");
@@ -77,8 +84,10 @@ public class ContatoController : Controller
             //Se o estado da ContatoModel é válida
             if (ModelState.IsValid)
             {
+                UsuarioModel usuarioLogado = _sessao.BuscarSessaoDoUsuario();
+                contato.UsuarioId = usuarioLogado.Id;
                 //Editamos o contato
-                _contatoRepositorio.Editar(contato);
+                contato = _contatoRepositorio.Editar(contato);
                 //Usamos uma variável temporária para exibir um alerta
                 TempData["MensagemSucesso"] = "Contato editado com sucesso!";
                 return RedirectToAction("Index");
