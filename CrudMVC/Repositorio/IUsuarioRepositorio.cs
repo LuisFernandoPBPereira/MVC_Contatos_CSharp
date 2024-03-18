@@ -7,6 +7,7 @@ namespace CrudMVC.Repositorio
         //Definimos a interface do usuário
         UsuarioModel BuscarPorId(int id);
         UsuarioModel BuscarPorLogin(string login);
+        UsuarioModel BuscarPorEmailELogin(string email, string login);
         List<UsuarioModel> BuscarTodos();
         UsuarioModel Adicionar(UsuarioModel contato);
         UsuarioModel Editar(UsuarioModel contato);

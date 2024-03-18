@@ -41,6 +41,12 @@ namespace CrudMVC.Repositorio
             return true;
         }
 
+        public UsuarioModel BuscarPorEmailELogin(string email, string login)
+        {
+            return _bancoContext.Usuarios.FirstOrDefault(x => x.Email.ToUpper() == email.ToUpper() &&
+                                                         x.Login.ToUpper() == login.ToUpper());
+        }
+
         /*
          * Ao buscar por ID, pegamos o primeiro ou o padrão pelo ID passado, 
          * e compararmos com o existente no banco 
