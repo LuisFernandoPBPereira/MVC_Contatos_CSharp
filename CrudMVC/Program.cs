@@ -1,4 +1,5 @@
 using CrudMVC.Data;
+using CrudMVC.Helper;
 using CrudMVC.Repositorio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,9 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//Permite a injeção de dependência do contexto http
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 //Permite a injeção de dependências
 builder.Services.AddScoped<IContatoRepositorio, ContatoRepositorio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<ISessao, Sessao>();
+
+//Adicionamos uma sessão
+builder.Services.AddSession(o =>
+{
+    o.Cookie.HttpOnly = true;
+    o.Cookie.IsEssential = true;
+});
 
 //Aqui é configurado a conexão do banco de dados ao iniciar a aplicação
 builder.Services.AddEntityFrameworkSqlServer().
@@ -36,6 +48,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+//Ao implementarmos o uso de sessões, configuramos a sessão para ser usada
+app.UseSession();
 //A rota padrão ao inicializar a aplicação é a rota de Login
 app.MapControllerRoute(
     name: "default",

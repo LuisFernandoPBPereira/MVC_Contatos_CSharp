@@ -1,4 +1,5 @@
-﻿using CrudMVC.Models;
+﻿using CrudMVC.Helper;
+using CrudMVC.Models;
 using CrudMVC.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +9,26 @@ namespace CrudMVC.Controllers
     {
         //Fazemos a injeção de dependências
         private readonly IUsuarioRepositorio _usuarioRepositorio;
-        public LoginController(IUsuarioRepositorio usuarioRepositorio)
+        private readonly ISessao _sessao;
+        public LoginController(IUsuarioRepositorio usuarioRepositorio,
+                               ISessao sessao)
         {
             _usuarioRepositorio = usuarioRepositorio;
+            _sessao = sessao;
         }
         public IActionResult Index()
         {
+            //Se o usuário estivar logado, redirecionar para a home
+            if (_sessao.BuscarSessaoDoUsuario() != null) return RedirectToAction("Index", "Home");
+
             return View();
+        }
+
+        public IActionResult Sair()
+        {
+            //Remove a sessão do usuárioa o clicar no botão de sair
+            _sessao.RemoverSessaoDoUsuario();
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
@@ -32,6 +46,8 @@ namespace CrudMVC.Controllers
                         //Comparamos a senha informada com a senha do banco de dados
                         if (usuario.SenhaValida(loginModel.Senha))
                         {
+                            //Criamos a sessão do usuário
+                            _sessao.CriarSessaoDoUsuario(usuario);
                             //Se o login for bem sucedido, o uusário é redirecionado para a home
                             return RedirectToAction("Index", "Home");
                         }
