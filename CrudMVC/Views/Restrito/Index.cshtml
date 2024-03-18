@@ -1,0 +1,12 @@
+﻿@model HomeModel
+@{
+    Layout = "_LayoutDeslogado";
+    ViewData["Title"] = "Página Restrita";
+}
+
+<div class="text-center">
+    <h1 class="display-4">
+        Você não ter permissão para acessar esta funcionalidade, 
+        <a asp-controller="Home" asp-action="Index">clique aqui para voltar</a>
+    </h1>
+</div>

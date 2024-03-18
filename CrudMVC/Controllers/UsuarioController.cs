@@ -1,110 +1,112 @@
-﻿using CrudMVC.Models;
+﻿using CrudMVC.Filters;
+using CrudMVC.Models;
 using CrudMVC.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CrudMVC.Controllers
+namespace CrudMVC.Controllers;
+
+//Determinamos que está página será acessada apenas quando o usuário estiver logado e ser perfil admin
+[PaginaRestritaAdmin]
+public class UsuarioController : Controller
 {
-    public class UsuarioController : Controller
+    private readonly IUsuarioRepositorio _usuarioRepositorio;
+    public UsuarioController(IUsuarioRepositorio usuarioRepositorio)
     {
-        private readonly IUsuarioRepositorio _usuarioRepositorio;
-        public UsuarioController(IUsuarioRepositorio usuarioRepositorio)
-        {
-            _usuarioRepositorio = usuarioRepositorio;
-        }
-        /*
-            Abaixo estão as Views das respectivas funcionalidades do CRUD
-         */
+        _usuarioRepositorio = usuarioRepositorio;
+    }
+    /*
+        Abaixo estão as Views das respectivas funcionalidades do CRUD
+     */
 
-        //Listamos todos os contatos no frontend
-        public IActionResult Index()
+    //Listamos todos os contatos no frontend
+    public IActionResult Index()
+    {
+        List<UsuarioModel> usuarios = _usuarioRepositorio.BuscarTodos();
+        return View(usuarios);
+    }
+    public IActionResult Criar()
+    {
+        return View();
+    }
+    //É invocado o método para buscar um usuário por ID
+    public IActionResult Editar(int id)
+    {
+        UsuarioModel usuario = _usuarioRepositorio.BuscarPorId(id);
+        return View(usuario);
+    }
+    public IActionResult ApagarConfirmacao(int id)
+    {
+        UsuarioModel usuario = _usuarioRepositorio.BuscarPorId(id);
+        return View(usuario);
+    }
+
+    /*
+     * ----------------------- MÉTODOS HTTP -------------------------
+    */
+
+    [HttpPost]
+    public IActionResult Criar(UsuarioModel usuario)
+    {
+        try
         {
-            List<UsuarioModel> usuarios = _usuarioRepositorio.BuscarTodos();
-            return View(usuarios);
-        }
-        public IActionResult Criar()
-        {
-            return View();
-        }
-        //É invocado o método para buscar um usuário por ID
-        public IActionResult Editar(int id)
-        {
-            UsuarioModel usuario = _usuarioRepositorio.BuscarPorId(id);
+            if (ModelState.IsValid)
+            {
+                _usuarioRepositorio.Adicionar(usuario);
+                TempData["MensagemSucesso"] = "Usuário cadastrado com sucesso!";
+                return RedirectToAction("Index");
+            }
+
             return View(usuario);
         }
-        public IActionResult ApagarConfirmacao(int id)
+        catch (Exception e)
         {
-            UsuarioModel usuario = _usuarioRepositorio.BuscarPorId(id);
+            TempData["MensagemErro"] = $"Não foi possível cadastrar seu usuário, tente novamente! Detalhe do erro {e.Message}";
+            return RedirectToAction("Index");
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Editar(UsuarioSemSenhaModel usuarioSemSenhaModel)
+    {
+        try
+        {
+            UsuarioModel usuario = null;
+            if (ModelState.IsValid)
+            {
+                usuario = new UsuarioModel()
+                {
+                    Id = usuarioSemSenhaModel.Id,
+                    Nome = usuarioSemSenhaModel.Nome,
+                    Login = usuarioSemSenhaModel.Login,
+                    Email = usuarioSemSenhaModel.Email,
+                    Perfil = usuarioSemSenhaModel.Perfil
+                };
+                usuario =  _usuarioRepositorio.Editar(usuario);
+                TempData["MensagemSucesso"] = "Usuário editado com sucesso!";
+                return RedirectToAction("Index");
+            }
+
             return View(usuario);
         }
-
-        /*
-         * ----------------------- MÉTODOS HTTP -------------------------
-        */
-
-        [HttpPost]
-        public IActionResult Criar(UsuarioModel usuario)
+        catch (Exception e)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _usuarioRepositorio.Adicionar(usuario);
-                    TempData["MensagemSucesso"] = "Usuário cadastrado com sucesso!";
-                    return RedirectToAction("Index");
-                }
-
-                return View(usuario);
-            }
-            catch (Exception e)
-            {
-                TempData["MensagemErro"] = $"Não foi possível cadastrar seu usuário, tente novamente! Detalhe do erro {e.Message}";
-                return RedirectToAction("Index");
-            }
+            TempData["MensagemErro"] = $"Não foi possível editar seu usuário, tente novamente! Detalhe do erro {e.Message}";
+            return RedirectToAction("Index");
         }
+    }
 
-        [HttpPost]
-        public IActionResult Editar(UsuarioSemSenhaModel usuarioSemSenhaModel)
+    public IActionResult Apagar(int id)
+    {
+        try
         {
-            try
-            {
-                UsuarioModel usuario = null;
-                if (ModelState.IsValid)
-                {
-                    usuario = new UsuarioModel()
-                    {
-                        Id = usuarioSemSenhaModel.Id,
-                        Nome = usuarioSemSenhaModel.Nome,
-                        Login = usuarioSemSenhaModel.Login,
-                        Email = usuarioSemSenhaModel.Email,
-                        Perfil = usuarioSemSenhaModel.Perfil
-                    };
-                    usuario =  _usuarioRepositorio.Editar(usuario);
-                    TempData["MensagemSucesso"] = "Usuário editado com sucesso!";
-                    return RedirectToAction("Index");
-                }
-
-                return View(usuario);
-            }
-            catch (Exception e)
-            {
-                TempData["MensagemErro"] = $"Não foi possível editar seu usuário, tente novamente! Detalhe do erro {e.Message}";
-                return RedirectToAction("Index");
-            }
+            _usuarioRepositorio.Apagar(id);
+            TempData["MensagemSucesso"] = "Usuário apagado com sucesso!";
+            return RedirectToAction("Index");
         }
-
-        public IActionResult Apagar(int id)
+        catch (Exception e)
         {
-            try
-            {
-                _usuarioRepositorio.Apagar(id);
-                TempData["MensagemSucesso"] = "Usuário apagado com sucesso!";
-                return RedirectToAction("Index");
-            }
-            catch (Exception e)
-            {
-                TempData["MensagemErro"] = $"Não foi possível apagar seu usuário, tente novamente! Detalhe do erro {e.Message}";
-                return RedirectToAction("Index");
-            }
+            TempData["MensagemErro"] = $"Não foi possível apagar seu usuário, tente novamente! Detalhe do erro {e.Message}";
+            return RedirectToAction("Index");
         }
     }
 }
