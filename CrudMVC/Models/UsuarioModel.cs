@@ -38,5 +38,11 @@ namespace CrudMVC.Models
         {
             Senha = Senha.GerarHash();
         }
+
+        //Criamos o método para setar uma nova senha e geramos o hash
+        public void SetNovaSenha(string novaSenha)
+        {
+            Senha = novaSenha.GerarHash();
+        }
     }
 }

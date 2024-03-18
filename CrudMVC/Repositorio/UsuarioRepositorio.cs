@@ -92,5 +92,26 @@ namespace CrudMVC.Repositorio
 
             return usuarioDb;
         }
+
+        public UsuarioModel AlterarSenha(AlterarSenhaModel alterarSenhaModel)
+        {
+            UsuarioModel usuarioDb = BuscarPorId(alterarSenhaModel.Id);
+
+            //Se não houver usuário
+            if (usuarioDb == null) throw new Exception("Houve um erro na atualização da senha, usuário não encontrado!");
+            //Se a senha não for válida
+            if (usuarioDb.SenhaValida(alterarSenhaModel.SenhaAtual) == false) throw new Exception("Senha atual não confere!");
+            //Se a nova senha for igual a antiga
+            if (usuarioDb.SenhaValida(alterarSenhaModel.NovaSenha)) throw new Exception("Nova senha deve ser diferente da atual!");
+
+            //Setamos a nova senha e alteramos a data de atualização para a data atual
+            usuarioDb.SetNovaSenha(alterarSenhaModel.NovaSenha);
+            usuarioDb.DataAtualizacao = DateTime.Now;
+
+            _bancoContext.Usuarios.Update(usuarioDb);
+            _bancoContext.SaveChanges();
+
+            return usuarioDb;
+        }
     }
 }

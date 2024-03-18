@@ -1,0 +1,46 @@
+﻿@model AlterarSenhaModel;
+@{
+    ViewData["Title"] = "Alterar Senha do Usuário";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Alterar Senha do Usuário</h1>
+</div>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MensagemSucesso"]
+    </div>
+}
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MensagemErro"]
+    </div>
+}
+
+<!--Aqui Configuramos o formulário para visualizar a Controller Contato com a ação Criar, sendo o http POST-->
+<!--Html.ValidationMessageFor faz a validação do campo HTML-->
+<form asp-controller="AlterarSenha" asp-action="Alterar" method="post">
+    <div class="mb-3">
+        <label for="senha" class="form-label">Senha Atual</label>
+        <input type="password" asp-for="SenhaAtual" class="form-control" id="senhaAtual" aria-describedby="nameHelp" placeholder="Digite a senha atual do usuário">
+        @Html.ValidationMessageFor(x => x.SenhaAtual)
+    </div>
+    <div class="mb-3">
+        <label for="senha" class="form-label">Nova Senha</label>
+        <input type="password" asp-for="NovaSenha" class="form-control" id="Novasenha" aria-describedby="nameHelp" placeholder="Digite a nova senha do usuário">
+        @Html.ValidationMessageFor(x => x.NovaSenha)
+    </div>
+    <div class="mb-3">
+        <label for="senha" class="form-label">Confirmar Nova Senha</label>
+        <input type="password" asp-for="ConfirmarNovaSenha" class="form-control" id="ConfirmarNovaSenha" aria-describedby="nameHelp" placeholder="Confirme a nova senha do usuário">
+        @Html.ValidationMessageFor(x => x.ConfirmarNovaSenha)
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Alterar Senha</button>
+    <a asp-controller="Home" asp-action="Index" role="button" class="btn btn-secondary btn-block">Voltar</a>
+</form>
