@@ -1,5 +1,6 @@
 ﻿using CrudMVC.Data;
 using CrudMVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrudMVC.Repositorio
 {
@@ -65,7 +66,9 @@ namespace CrudMVC.Repositorio
         //Aqui listamos retornamos a listagem de todos os usuários
         public List<UsuarioModel> BuscarTodos()
         {
-            return _bancoContext.Usuarios.ToList();
+            return _bancoContext.Usuarios
+                .Include(x => x.Contatos)
+                .ToList();
         }
 
         //Buscamos o usuário por Id e retornamos

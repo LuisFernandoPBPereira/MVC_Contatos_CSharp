@@ -1,4 +1,4 @@
-﻿@model List<UsuarioModel>;
+﻿@model List<UsuarioModel>
 @{
     ViewData["Title"] = "Lista de Usuários";
 }
@@ -38,6 +38,7 @@
                 <th scope="col">Nome</th>
                 <th scope="col">Login</th>
                 <th scope="col">Perfil</th>
+                <th scope="col">Total de Contatos</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Data de cadastro</th>
                 <th scope="col">Data de atualização</th>
@@ -59,6 +60,11 @@
                         <td>@item.Nome</td>
                         <td>@item.Login</td>
                         <td>@(item.Perfil == CrudMVC.Enums.PerfilEnum.Admin ? "Administrador" : "Padrão")</td>
+                        <td>
+                            <a href="javascript:" usuario-id="@item.Id" class="btn btn-success btn-sm btn-total-contatos">
+                                @(item.Contatos != null && item.Contatos.Any() ? item.Contatos.Count() : 0)
+                            </a>
+                        </td>
                         <td>@item.Email</td>
                         <td>@item.DataCadastro</td>
                         <td>@item.DataAtualizacao</td>
@@ -73,4 +79,19 @@
             }
         </tbody>
     </table>
+    <div id="modalContatosUsuario" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Listagem de Contatos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   <div id="listaContatosUsuario"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
