@@ -1,4 +1,5 @@
 ﻿using CrudMVC.Enums;
+using CrudMVC.Helper;
 using System.ComponentModel.DataAnnotations;
 
 namespace CrudMVC.Models
@@ -28,7 +29,14 @@ namespace CrudMVC.Models
 
         public bool SenhaValida(string senha)
         {
-            return Senha == senha;
+            //atribuímos a senha criptografada
+            return Senha == senha.GerarHash();
+        }
+
+        //Criamos o método para transformar a senha informada em uma senha criptografada
+        public void SetSenhaHash()
+        {
+            Senha = Senha.GerarHash();
         }
     }
 }
